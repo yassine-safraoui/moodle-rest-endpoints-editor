@@ -13,13 +13,13 @@ export default function LoginProvider({
     <>
       <Authenticated>{children}</Authenticated>
       <AuthLoading>
-        <div className="flex h-full w-full items-center justify-center gap-3 text-lg">
+        <div className="flex h-screen w-screen items-center justify-center gap-3 text-lg">
           <LoadingSpinner />
           Logging in...
         </div>
       </AuthLoading>
       <Unauthenticated>
-        <div className="flex h-full w-full items-center justify-center gap-3 text-lg">
+        <div className="flex h-screen w-screen items-center justify-center gap-3 text-lg">
           <Button onClick={() => loginWithRedirect()}>Login</Button>
         </div>
       </Unauthenticated>

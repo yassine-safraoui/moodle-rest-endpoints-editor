@@ -51,7 +51,7 @@ export default function Dashboard({
           }
         />
       </div>
-      <div className="flex h-screen w-full flex-col overflow-hidden">
+      <div className="flex h-full w-full flex-col overflow-hidden">
         <Navbar />
         {children}
       </div>
