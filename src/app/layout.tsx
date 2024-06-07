@@ -23,6 +23,13 @@ export default function RootLayout({
             {children}
             <footer className="flex h-10 shrink-0 items-center justify-center border-t bg-muted/40 px-4">
               <span className="text-sm text-muted-foreground">
+                Made with 💖 by{" "}
+                <a
+                  href="https://github.com/yassine-safraoui"
+                  className="hover:underline hover:underline-offset-2"
+                >
+                  Yassine Safraoui
+                </a>{" "}
                 © {new Date().getFullYear()} LIG
               </span>
             </footer>
