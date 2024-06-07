@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 export const getEndpointsList = query({
   args: {},
@@ -37,5 +37,17 @@ export const getEndpoint = query({
       .query("endpoints")
       .filter((endpoint) => endpoint.eq(endpoint.field("_id"), id))
       .first();
+  },
+});
+
+
+export const setEndpointVisibility = mutation({
+  args: { endpointId: v.string(), hidden: v.boolean() },
+  handler: async (ctx, { endpointId, hidden }) => {
+    if (ctx.auth.getUserIdentity() === null) throw new Error("Unauthorized");
+    if (!endpointId) throw new Error("endpointId is required");
+    const endpoint = await ctx.db.query("endpoints").filter((endpoint) => endpoint.eq(endpoint.field("_id"), endpointId)).first();
+    if (!endpoint) throw new Error("Endpoint not found");
+    await ctx.db.patch<"endpoints">(endpoint?._id, { hidden });
   },
 });

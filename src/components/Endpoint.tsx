@@ -3,6 +3,10 @@ import { Doc } from "../../convex/_generated/dataModel";
 import { IEndpointParams, IEndpointResponse } from "./types";
 import EndpointParams from "./EndpointParams";
 import EndpointResponse from "./EndpointResponse";
+import { Button } from "./ui/button";
+import { EyeOff } from "lucide-react";
+import { api } from "../../convex/_generated/api";
+import { useMutation } from "convex/react";
 
 export default function EndpointComponent({
   endpoint,
@@ -12,9 +16,26 @@ export default function EndpointComponent({
     responseSchema: IEndpointResponse;
   };
 }) {
+  const setEndpointVisibility = useMutation(
+    api.endpoints.setEndpointVisibility,
+  );
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="text-lg font-semibold md:text-2xl">{endpoint?.name}</h1>
+      <div className="flex flex-row items-center gap-2">
+        <h1 className="text-lg font-semibold md:text-2xl">{endpoint?.name}</h1>
+        {endpoint.hidden ? (
+          <EyeOff
+            size={"2rem"}
+            className="cursor-pointer"
+            onClick={() =>
+              setEndpointVisibility({
+                endpointId: endpoint._id,
+                hidden: false,
+              })
+            }
+          />
+        ) : null}
+      </div>
       <p>{endpoint.description}</p>
       {endpoint.requiredRoles.length > 0 && (
         <span>
@@ -35,7 +56,7 @@ export default function EndpointComponent({
       <EndpointParams params={endpoint.paramsSchema} />
       <br />
       <b>Response</b>
-      <code className="bg-syntax-code-background text-syntax-code rounded-md p-3">
+      <code className="rounded-md bg-syntax-code-background p-3 text-syntax-code">
         <EndpointResponse params={endpoint.responseSchema} />
       </code>
       {/* <code>{endpoint.responseSchema}</code> */}

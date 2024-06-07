@@ -16,8 +16,11 @@ export default function Dashboard({
 }>) {
   const pathname = usePathname();
   const [endpointsFilter, setEndpointsFilter] = useState<string>("");
-  const { data: endpointsList } = useQuery(api.endpoints.getEndpointsList, {});
-  const { data: categoriesList } = useQuery(
+  const { data: endpointsList, isPending: endpointsLoading } = useQuery(
+    api.endpoints.getEndpointsList,
+    {},
+  );
+  const { data: categoriesList, isPending: categoriesLoading } = useQuery(
     api.categories.getCategoriesList,
     {},
   );
@@ -39,6 +42,8 @@ export default function Dashboard({
           filter={endpointsFilter}
           endpointsList={endpointsList}
           categoriesList={categoriesList}
+          categoriesLoading={categoriesLoading}
+          endpointsLoading={endpointsLoading}
           activeCategory={
             pathname.split("/").at(-2) == "category"
               ? pathname.split("/").at(-1)

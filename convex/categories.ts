@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { Doc } from "./_generated/dataModel";
 
 export const getCategoriesList = query({
@@ -42,4 +42,15 @@ export const getCategory = query({
         return { endpoints, ...foundCategory };
 
     }
+});
+
+export const setCategoryVisibility = mutation({
+    args: { categoryId: v.string(), hidden: v.boolean() },
+    handler: async (ctx, { categoryId, hidden }) => {
+        if (ctx.auth.getUserIdentity() === null) throw new Error("Unauthorized");
+        if (!categoryId) throw new Error("categoryId is required");
+        const category = await ctx.db.query("categories").filter((category) => category.eq(category.field("_id"), categoryId)).first();
+        if (!category) throw new Error("Category not found");
+        await ctx.db.patch<"categories">(category?._id, { hidden });
+    },
 });
