@@ -40,7 +40,17 @@ export default function Navbar() {
               <DropdownMenuSeparator />
             </>
           ) : null}
-          <DropdownMenuItem onClick={() => logout()}>Logout</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() =>
+              logout({
+                logoutParams: {
+                  returnTo: window.location.origin,
+                },
+              })
+            }
+          >
+            Logout
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
