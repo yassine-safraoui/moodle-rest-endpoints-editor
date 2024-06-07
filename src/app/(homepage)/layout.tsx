@@ -7,6 +7,7 @@ import { useQuery } from "convex-helpers/react";
 import { api } from "@/../convex/_generated/api";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import Navbar from "@/components/Navbar";
 
 export default function Dashboard({
   children,
@@ -50,7 +51,10 @@ export default function Dashboard({
           }
         />
       </div>
-      {children}
+      <div className="flex h-screen w-full flex-col overflow-hidden">
+        <Navbar />
+        {children}
+      </div>
     </div>
   );
 }
