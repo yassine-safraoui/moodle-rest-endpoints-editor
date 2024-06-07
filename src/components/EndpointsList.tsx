@@ -27,13 +27,14 @@ export default function EndpointsList({
         <div
           key={category._id}
           hidden={
-            !!filter &&
-            endpointsList.filter(
-              (endpoint) =>
-                filter &&
-                endpoint.categoryId === category._id &&
-                endpoint.name.toLowerCase().includes(filter.toLowerCase()),
-            ).length === 0
+            (!!filter &&
+              endpointsList.filter(
+                (endpoint) =>
+                  filter &&
+                  endpoint.categoryId === category._id &&
+                  endpoint.name.toLowerCase().includes(filter.toLowerCase()),
+              ).length === 0) ||
+            category.hidden
           }
         >
           <Link
@@ -42,20 +43,25 @@ export default function EndpointsList({
           >
             {category.name}
           </Link>
-          <ul className="flex flex-col gap-2 pl-5 pt-1">
+          <ul className="flex flex-col gap-2 pl-6 pt-1">
             {endpointsList
               .filter((endpoint) => endpoint.categoryId === category._id)
               .map((endpoint) => (
                 <Link
                   href={`/endpoint/${endpoint.name}`}
                   key={endpoint._id}
-                  className={`block text-wrap hover:text-accent-foreground hover:underline ${endpoint.name === activeEndpoint ? "font-bold" : ""}`}
+                  className={`block overflow-hidden text-wrap hover:text-accent-foreground hover:underline ${endpoint.name === activeEndpoint ? "font-bold" : ""}`}
                   hidden={
-                    !!filter &&
-                    !endpoint.name.toLowerCase().includes(filter.toLowerCase())
+                    (!!filter &&
+                      !endpoint.name
+                        .toLowerCase()
+                        .includes(filter.toLowerCase())) ||
+                    endpoint.hidden
                   }
                 >
-                  {endpoint.name}
+                  {endpoint.name
+                    .split("_")
+                    .map((x, i) => (i ? [<wbr key={i} />, "_", x] : x))}
                 </Link>
               ))}
           </ul>
