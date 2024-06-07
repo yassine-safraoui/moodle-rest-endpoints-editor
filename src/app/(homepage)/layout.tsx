@@ -23,7 +23,7 @@ export default function Dashboard({
 
   return (
     <div className="flex h-full w-full flex-row overflow-hidden">
-      <div className="flex h-full w-96 flex-col border-r bg-muted/40 text-sm font-medium">
+      <div className="flex h-full w-[36vw] flex-col border-r bg-muted/40 text-sm font-medium">
         <div className="relative my-4 w-full px-6">
           <Search className="absolute left-[2.1rem] top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
