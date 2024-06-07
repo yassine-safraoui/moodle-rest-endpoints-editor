@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Doc } from "@/../convex/_generated/dataModel";
+import { useEffect, useRef } from "react";
 
 export default function EndpointsList({
   filter,
@@ -14,6 +15,30 @@ export default function EndpointsList({
   activeEndpoint?: string;
   activeCategory?: string;
 }) {
+  const activeCategoryElement = useRef<HTMLAnchorElement>(null);
+  const activeEndpointElement = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (activeCategoryElement.current) {
+      activeCategoryElement.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    } else if (activeEndpointElement.current) {
+      activeEndpointElement.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    }
+  }, [
+    activeCategoryElement,
+    activeEndpointElement,
+    categoriesList,
+    endpointsList,
+  ]);
+
   if (!categoriesList || !endpointsList) {
     return (
       <div className="flex h-full w-full items-center justify-center">
@@ -37,20 +62,28 @@ export default function EndpointsList({
             category.hidden
           }
         >
-          <Link
-            className={`text-wrap italic hover:text-accent-foreground hover:underline ${category.name === activeCategory ? "font-bold" : ""}`}
-            href={`/category/${category.name}`}
-          >
-            {category.name}
+          <Link href={`/category/${category.name}`} legacyBehavior>
+            <a
+              className={`text-wrap px-2 italic hover:text-accent-foreground hover:underline ${
+                category.name === activeCategory
+                  ? "rounded-md bg-slate-200 py-0.5 font-bold"
+                  : ""
+              }`}
+              ref={
+                activeCategory === category.name ? activeCategoryElement : null
+              }
+            >
+              {category.name}
+            </a>
           </Link>
           <ul className="flex flex-col gap-2 pl-6 pt-1">
             {endpointsList
               .filter((endpoint) => endpoint.categoryId === category._id)
               .map((endpoint) => (
                 <Link
+                  legacyBehavior
                   href={`/endpoint/${endpoint.name}`}
                   key={endpoint._id}
-                  className={`block overflow-hidden text-wrap hover:text-accent-foreground hover:underline ${endpoint.name === activeEndpoint ? "font-bold" : ""}`}
                   hidden={
                     (!!filter &&
                       !endpoint.name
@@ -59,9 +92,22 @@ export default function EndpointsList({
                     endpoint.hidden
                   }
                 >
-                  {endpoint.name
-                    .split("_")
-                    .map((x, i) => (i ? [<wbr key={i} />, "_", x] : x))}
+                  <a
+                    className={`block w-fit max-w-full overflow-hidden text-wrap px-2 pr-4 hover:text-accent-foreground hover:underline ${
+                      endpoint.name === activeEndpoint
+                        ? "rounded-md bg-slate-200 py-0.5 font-bold"
+                        : ""
+                    }`}
+                    ref={
+                      activeEndpoint === endpoint.name
+                        ? activeEndpointElement
+                        : null
+                    }
+                  >
+                    {endpoint.name
+                      .split("_")
+                      .map((x, i) => (i ? [<wbr key={i} />, "_", x] : x))}
+                  </a>
                 </Link>
               ))}
           </ul>
