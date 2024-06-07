@@ -36,6 +36,5 @@ yarn-error.log*
 next-env.d.ts
 
 certificates
-convex/_generated/*
 .vscode/*
 pnpm-lock.yaml
