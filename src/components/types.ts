@@ -29,4 +29,25 @@ export type IEndpointResponse = {
         }
     );
 
+export function ValidateResponse(response: Record<string, any>): IEndpointResponse {
+    if (!response['type']) throw new Error('Response type is required');
+    if (response['type'] === 'array') {
+        if (!response['items']) throw new Error('Response items is required for array type');
+        return {
+            description: response['description'],
+            nullable: response['nullable'],
+            type: 'array',
+            items: ValidateResponse(response['items']),
+        };
+    }
+    if (response['type'] === 'object') {
+        if (!response['properties']) throw new Error('Response properties is required for object type');
+        for (const key in response['properties']) {
+            response['properties'][key] = ValidateResponse(response['properties'][key]);
+        }
+        return response as IEndpointResponse;
+    }
+    return response as IEndpointResponse;
+}
+
 export type IEndpointParams = z.infer<typeof EndpointParamsSchema>;
