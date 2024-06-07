@@ -40,12 +40,12 @@ export default function Dashboard({
           endpointsList={endpointsList}
           categoriesList={categoriesList}
           activeCategory={
-            pathname.split("/").at(-1) == "category"
+            pathname.split("/").at(-2) == "category"
               ? pathname.split("/").at(-1)
               : undefined
           }
           activeEndpoint={
-            pathname.split("/").at(-1) == "endpoint"
+            pathname.split("/").at(-2) == "endpoint"
               ? pathname.split("/").at(-1)
               : undefined
           }
