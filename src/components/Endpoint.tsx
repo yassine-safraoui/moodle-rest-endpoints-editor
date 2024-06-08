@@ -49,29 +49,31 @@ export default function EndpointComponent({
             }
           />
         )}
-        {!endpoint.hidden && !endpoint.relevant ? (
-          <EyeOff
-            size={"2rem"}
-            className="cursor-pointer"
-            onClick={() =>
-              setEndpointVisibility({
-                endpointId: endpoint._id,
-                hidden: true,
-              })
-            }
-          />
-        ) : (
-          <Eye
-            size={"2rem"}
-            className="cursor-pointer"
-            onClick={() =>
-              setEndpointVisibility({
-                endpointId: endpoint._id,
-                hidden: false,
-              })
-            }
-          />
-        )}
+
+        {!endpoint.relevant &&
+          (!endpoint.hidden && !endpoint.relevant ? (
+            <EyeOff
+              size={"2rem"}
+              className="cursor-pointer"
+              onClick={() =>
+                setEndpointVisibility({
+                  endpointId: endpoint._id,
+                  hidden: true,
+                })
+              }
+            />
+          ) : (
+            <Eye
+              size={"2rem"}
+              className="cursor-pointer"
+              onClick={() =>
+                setEndpointVisibility({
+                  endpointId: endpoint._id,
+                  hidden: false,
+                })
+              }
+            />
+          ))}
       </div>
       <p>{endpoint.description}</p>
       {endpoint.requiredRoles.length > 0 && (
