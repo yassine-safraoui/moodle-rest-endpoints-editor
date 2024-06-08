@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Doc } from "@/../convex/_generated/dataModel";
 import { useEffect, useRef } from "react";
-import { Eye, Star } from "lucide-react";
+import { EyeOff, Star } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { ScrollArea } from "./ui/scroll-area";
@@ -126,8 +126,8 @@ export default function EndpointsList({
                   }
                 />
               )}
-              {endpointsList.every((endpoint) => !endpoint.relevant) ? (
-                <Eye
+              {categoryEndpoints.every((endpoint) => !endpoint.relevant) ? (
+                <EyeOff
                   className="hidden cursor-pointer group-hover:inline-block"
                   size={"1rem"}
                   onClick={() =>
@@ -138,9 +138,9 @@ export default function EndpointsList({
                   }
                 />
               ) : (
-                <Eye
+                <EyeOff
                   className="hidden group-hover:inline-block"
-                  color="muted"
+                  color="#a1a5ae"
                   size={"1rem"}
                 />
               )}
@@ -204,7 +204,7 @@ export default function EndpointsList({
                             })
                           }
                         />
-                        <Eye
+                        <EyeOff
                           className="hidden cursor-pointer group-hover:inline-block"
                           size={"1rem"}
                           onClick={() =>

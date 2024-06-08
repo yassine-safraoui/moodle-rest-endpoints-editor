@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Doc } from "@/../convex/_generated/dataModel";
 import { useEffect, useRef } from "react";
-import { EyeOff } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { ScrollArea } from "./ui/scroll-area";
-import { Label } from "./ui/label";
 
 export default function HiddenEndpointsList({
   filter,
@@ -129,7 +128,7 @@ export default function HiddenEndpointsList({
                         .map((x, i) => (i ? [<wbr key={i} />, "_", x] : x))}
                     </a>
                   </Link>
-                  <EyeOff
+                  <Eye
                     className="hidden cursor-pointer group-hover:inline-block"
                     size={"1rem"}
                     onClick={() =>

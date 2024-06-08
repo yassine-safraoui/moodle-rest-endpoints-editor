@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Doc } from "@/../convex/_generated/dataModel";
 import { useEffect, useRef } from "react";
-import { EyeOff } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { ScrollArea } from "./ui/scroll-area";
-import { Label } from "./ui/label";
 
 export default function HiddenCategoriesList({
   filter,
@@ -70,7 +69,7 @@ export default function HiddenCategoriesList({
                 {category.name}
               </a>
             </Link>
-            <EyeOff
+            <Eye
               className="hidden cursor-pointer group-hover:inline-block"
               size={"1rem"}
               onClick={() =>
