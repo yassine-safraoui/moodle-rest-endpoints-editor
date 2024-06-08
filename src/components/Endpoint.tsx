@@ -3,8 +3,7 @@ import { Doc } from "../../convex/_generated/dataModel";
 import { IEndpointParams, IEndpointResponse } from "./types";
 import EndpointParams from "./EndpointParams";
 import EndpointResponse from "./EndpointResponse";
-import { Button } from "./ui/button";
-import { EyeOff } from "lucide-react";
+import { Eye, EyeOff, Star } from "lucide-react";
 import { api } from "../../convex/_generated/api";
 import { useMutation } from "convex/react";
 
@@ -19,12 +18,50 @@ export default function EndpointComponent({
   const setEndpointVisibility = useMutation(
     api.endpoints.setEndpointVisibility,
   );
+  const setEndpointRelevance = useMutation(api.endpoints.setEndpointRelevance);
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row items-center gap-2">
         <h1 className="text-lg font-semibold md:text-2xl">{endpoint?.name}</h1>
-        {endpoint.hidden ? (
+        {endpoint.relevant ? (
+          <Star
+            size={"2rem"}
+            strokeWidth={0}
+            fill="#ffe234"
+            className="cursor-pointer"
+            onClick={() =>
+              setEndpointRelevance({
+                endpointId: endpoint._id,
+                relevant: false,
+              })
+            }
+          />
+        ) : (
+          <Star
+            className="cursor-pointer"
+            size={"2rem"}
+            onClick={() =>
+              setEndpointRelevance({
+                endpointId: endpoint._id,
+                relevant: true,
+              })
+            }
+          />
+        )}
+        {!endpoint.hidden && !endpoint.relevant ? (
           <EyeOff
+            size={"2rem"}
+            className="cursor-pointer"
+            onClick={() =>
+              setEndpointVisibility({
+                endpointId: endpoint._id,
+                hidden: true,
+              })
+            }
+          />
+        ) : (
+          <Eye
             size={"2rem"}
             className="cursor-pointer"
             onClick={() =>
@@ -34,7 +71,7 @@ export default function EndpointComponent({
               })
             }
           />
-        ) : null}
+        )}
       </div>
       <p>{endpoint.description}</p>
       {endpoint.requiredRoles.length > 0 && (
