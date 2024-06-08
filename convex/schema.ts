@@ -15,7 +15,10 @@ export default defineSchema({
 		responseSchema: v.string(),
 		requiredRoles: v.array(v.string()),
 		hidden: v.boolean(),
-	}),
+		relevant: v.boolean(),
+	}).index("by_category", ["categoryId"])
+		.index("by_relevance", ["relevant"])
+		.index("by_hidden", ["hidden"]),
 	users: defineTable({
 		name: v.string(),
 		tokenIdentifier: v.string(),

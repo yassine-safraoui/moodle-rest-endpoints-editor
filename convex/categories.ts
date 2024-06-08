@@ -8,7 +8,6 @@ export const getCategoriesList = query({
         if (ctx.auth.getUserIdentity() === null) throw new Error("Unauthorized");
         return ctx.db
             .query("categories")
-            .filter((category) => category.not(category.field("hidden")))
             .collect();
     },
 });
@@ -51,6 +50,30 @@ export const setCategoryVisibility = mutation({
         if (!categoryId) throw new Error("categoryId is required");
         const category = await ctx.db.query("categories").filter((category) => category.eq(category.field("_id"), categoryId)).first();
         if (!category) throw new Error("Category not found");
+        const endpoints = await ctx.db.query("endpoints").filter((endpoint) =>
+            endpoint.eq(endpoint.field("categoryId"), category._id)).collect();
+        if (!hidden) {
+            await Promise.all(endpoints.map(async (endpoint) => {
+                await ctx.db.patch<"endpoints">(endpoint._id, { hidden: false });
+            }));
+        } else
+            if (endpoints.some((endpoint) => endpoint.relevant)) throw new Error("Category has relevant endpoints");
+            
         await ctx.db.patch<"categories">(category?._id, { hidden });
+    },
+});
+
+export const setCategoryRelevance = mutation({
+    args: { categoryId: v.string(), relevant: v.boolean() },
+    handler: async (ctx, { categoryId, relevant }) => {
+        if (ctx.auth.getUserIdentity() === null) throw new Error("Unauthorized");
+        if (!categoryId) throw new Error("categoryId is required");
+        const category = await ctx.db.query("categories").filter((category) => category.eq(category.field("_id"), categoryId)).first();
+        if (!category) throw new Error("Category not found");
+        const endpoints = await ctx.db.query("endpoints")
+            .filter((endpoint) => endpoint.eq(endpoint.field("categoryId"), category._id)).collect();
+        await Promise.all(endpoints.map(
+            async (endpoint) => await ctx.db.patch<"endpoints">(endpoint._id, { relevant })
+        ));
     },
 });

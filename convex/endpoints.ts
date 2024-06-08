@@ -5,21 +5,9 @@ export const getEndpointsList = query({
   args: {},
   handler: async (ctx) => {
     if (ctx.auth.getUserIdentity() === null) throw new Error("Unauthorized");
-    const hiddenCategories = await ctx.db
-      .query("categories")
-      .filter((category) => category.field("hidden"))
-      .collect();
-    const visibleEndpoints = await ctx.db
+    return await ctx.db
       .query("endpoints")
-      .filter((endpoint) => endpoint.not(endpoint.field("hidden")))
       .collect();
-    return visibleEndpoints.filter(
-      (endpoint) =>
-        endpoint.categoryId &&
-        !hiddenCategories.some(
-          (category) => category._id === endpoint.categoryId,
-        ),
-    );
   },
 });
 
@@ -48,6 +36,21 @@ export const setEndpointVisibility = mutation({
     if (!endpointId) throw new Error("endpointId is required");
     const endpoint = await ctx.db.query("endpoints").filter((endpoint) => endpoint.eq(endpoint.field("_id"), endpointId)).first();
     if (!endpoint) throw new Error("Endpoint not found");
-    await ctx.db.patch<"endpoints">(endpoint?._id, { hidden });
+    if (hidden)
+      await ctx.db.patch<"endpoints">(endpoint?._id, { hidden, relevant: false });
+    else
+      await ctx.db.patch<"endpoints">(endpoint?._id, { hidden });
+  },
+});
+
+export const setEndpointRelevance = mutation({
+  args: { endpointId: v.string(), relevant: v.boolean() },
+  handler: async (ctx, { endpointId, relevant }) => {
+    if (ctx.auth.getUserIdentity() === null) throw new Error("Unauthorized");
+    if (!endpointId) throw new Error("endpointId is required");
+    const endpoint = await ctx.db.query("endpoints").filter((endpoint) => endpoint.eq(endpoint.field("_id"), endpointId)).first();
+    if (!endpoint) throw new Error("Endpoint not found");
+    if (endpoint.hidden) throw new Error("Endpoint is hidden");
+    await ctx.db.patch<"endpoints">(endpoint._id, { relevant });
   },
 });
