@@ -5,6 +5,7 @@
   "scripts": {
     "dev:frontend": "next dev --experimental-https",
     "dev:backend": "convex dev",
+    "deploy": "convex deploy",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
