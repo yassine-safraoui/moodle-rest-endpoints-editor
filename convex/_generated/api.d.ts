@@ -16,6 +16,7 @@ import type {
 } from "convex/server";
 import type * as categories from "../categories.js";
 import type * as endpoints from "../endpoints.js";
+import type * as outdatedEndpoints from "../outdatedEndpoints.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -28,6 +29,7 @@ import type * as endpoints from "../endpoints.js";
 declare const fullApi: ApiFromModules<{
   categories: typeof categories;
   endpoints: typeof endpoints;
+  outdatedEndpoints: typeof outdatedEndpoints;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

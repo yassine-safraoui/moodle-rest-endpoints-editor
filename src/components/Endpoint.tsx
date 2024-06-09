@@ -94,7 +94,7 @@ export default function EndpointComponent({
       <b>Request</b>
       <EndpointParams params={endpoint.paramsSchema} />
       <br />
-      <b>Response</b>
+      <b>Response( from Moodle {endpoint.responseVersion.toFixed(1)})</b>
       <code className="rounded-md bg-syntax-code-background p-3 text-syntax-code">
         <EndpointResponse params={endpoint.responseSchema} />
       </code>

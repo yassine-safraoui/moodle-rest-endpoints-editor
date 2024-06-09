@@ -13,6 +13,7 @@ export default defineSchema({
 		description: v.string(),
 		paramsSchema: v.string(),
 		responseSchema: v.string(),
+		responseVersion: v.number(),
 		requiredRoles: v.array(v.string()),
 		hidden: v.boolean(),
 		relevant: v.boolean(),
@@ -24,4 +25,3 @@ export default defineSchema({
 		tokenIdentifier: v.string(),
 	}).index("by_token", ["tokenIdentifier"]),
 });
-
