@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input";
 import EndpointsList from "@/components/EndpointsList";
 import { useQuery } from "convex-helpers/react";
 import { api } from "@/../convex/_generated/api";
-import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { useCallback, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { Tabs, TabsContent, TabsTrigger, TabsList } from "@/components/ui/tabs";
 import HiddenEndpointsList from "@/components/HiddenEndpointsList";
@@ -29,10 +29,31 @@ export default function Dashboard({
     {},
   );
 
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams],
+  );
+  const router = useRouter();
+
   return (
     <Tabs
       orientation="vertical"
-      defaultValue="visible-endpoints"
+      defaultValue={
+        searchParams.get("tab") ??
+        (!endpointsLoading &&
+        endpointsList?.some((endpoint) => endpoint.relevant)
+          ? "relevant-endpoints"
+          : "visible-endpoints")
+      }
+      onValueChange={(value) => {
+        router.push(pathname + "?" + createQueryString("tab", value));
+      }}
       className="flex h-full w-full flex-row gap-0 overflow-hidden p-0"
     >
       <TabsList className="m-0 justify-center rounded-none px-2">
