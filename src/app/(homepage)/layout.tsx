@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import EndpointsList from "@/components/EndpointsList";
 import { useQuery } from "convex-helpers/react";
 import { api } from "@/../convex/_generated/api";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { Tabs, TabsContent, TabsTrigger, TabsList } from "@/components/ui/tabs";
@@ -39,18 +39,31 @@ export default function Dashboard({
     },
     [searchParams],
   );
+  const [activeEndpoint, setActiveEndpoint] = useState<string | undefined>(
+    undefined,
+  );
+  const [activeCategory, setActiveCategory] = useState<string | undefined>(
+    undefined,
+  );
+  useEffect(() => {
+    setActiveEndpoint(
+      pathname.split("/").at(-2) == "endpoint"
+        ? pathname.split("/").at(-1)
+        : undefined,
+    );
+    setActiveCategory(
+      pathname.split("/").at(-2) == "category"
+        ? pathname.split("/").at(-1)
+        : undefined,
+    );
+  }, [pathname]);
+
   const router = useRouter();
 
   return (
     <Tabs
       orientation="vertical"
-      defaultValue={
-        searchParams.get("tab") ??
-        (!endpointsLoading &&
-        endpointsList?.some((endpoint) => endpoint.relevant)
-          ? "relevant-endpoints"
-          : "visible-endpoints")
-      }
+      defaultValue="relevant-endpoints"
       onValueChange={(value) => {
         router.push(pathname + "?" + createQueryString("tab", value));
       }}
@@ -83,16 +96,8 @@ export default function Dashboard({
             categoriesList={categoriesList}
             categoriesLoading={categoriesLoading}
             endpointsLoading={endpointsLoading}
-            activeCategory={
-              pathname.split("/").at(-2) == "category"
-                ? pathname.split("/").at(-1)
-                : undefined
-            }
-            activeEndpoint={
-              pathname.split("/").at(-2) == "endpoint"
-                ? pathname.split("/").at(-1)
-                : undefined
-            }
+            activeCategory={activeCategory}
+            activeEndpoint={activeEndpoint}
           />
         </TabsContent>
         <TabsContent
@@ -105,16 +110,8 @@ export default function Dashboard({
             categoriesList={categoriesList}
             categoriesLoading={categoriesLoading}
             endpointsLoading={endpointsLoading}
-            activeCategory={
-              pathname.split("/").at(-2) == "category"
-                ? pathname.split("/").at(-1)
-                : undefined
-            }
-            activeEndpoint={
-              pathname.split("/").at(-2) == "endpoint"
-                ? pathname.split("/").at(-1)
-                : undefined
-            }
+            activeCategory={activeCategory}
+            activeEndpoint={activeEndpoint}
           />
         </TabsContent>
         <TabsContent
@@ -127,16 +124,8 @@ export default function Dashboard({
             categoriesList={categoriesList}
             categoriesLoading={categoriesLoading}
             endpointsLoading={endpointsLoading}
-            activeCategory={
-              pathname.split("/").at(-2) == "category"
-                ? pathname.split("/").at(-1)
-                : undefined
-            }
-            activeEndpoint={
-              pathname.split("/").at(-2) == "endpoint"
-                ? pathname.split("/").at(-1)
-                : undefined
-            }
+            activeCategory={activeCategory}
+            activeEndpoint={activeEndpoint}
           />
         </TabsContent>
         <TabsContent
@@ -147,11 +136,7 @@ export default function Dashboard({
             filter={endpointsFilter}
             categoriesList={categoriesList}
             categoriesLoading={categoriesLoading}
-            activeCategory={
-              pathname.split("/").at(-2) == "category"
-                ? pathname.split("/").at(-1)
-                : undefined
-            }
+            activeCategory={activeCategory}
           />
         </TabsContent>
       </div>
