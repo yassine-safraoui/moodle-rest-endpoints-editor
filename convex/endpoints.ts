@@ -134,3 +134,14 @@ export const setEndpointsResponse = internalAction({
     }
   }
 })
+
+export const setEndpointImplemented = mutation({
+  args: { endpointId: v.string(), implemented: v.boolean() },
+  handler: async (ctx, { endpointId, implemented }) => {
+    if (ctx.auth.getUserIdentity() === null) throw new Error("Unauthorized");
+    if (!endpointId) throw new Error("endpointId is required");
+    const endpoint = await ctx.db.query("endpoints").filter((endpoint) => endpoint.eq(endpoint.field("_id"), endpointId)).first();
+    if (!endpoint) throw new Error("Endpoint not found");
+    await ctx.db.patch<"endpoints">(endpoint._id, { implemented });
+  },
+})

@@ -17,6 +17,7 @@ export default defineSchema({
 		requiredRoles: v.array(v.string()),
 		hidden: v.boolean(),
 		relevant: v.boolean(),
+		implemented: v.optional(v.boolean()),
 	}).index("by_category", ["categoryId"])
 		.index("by_relevance", ["relevant"])
 		.index("by_hidden", ["hidden"]),

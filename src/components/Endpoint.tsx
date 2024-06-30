@@ -3,7 +3,7 @@ import { Doc } from "../../convex/_generated/dataModel";
 import { IEndpointParams, IEndpointResponse } from "./types";
 import EndpointParams from "./EndpointParams";
 import EndpointResponse from "./EndpointResponse";
-import { Eye, EyeOff, Star } from "lucide-react";
+import { Check, Eye, EyeOff, Star } from "lucide-react";
 import { api } from "../../convex/_generated/api";
 import { useMutation } from "convex/react";
 
@@ -19,6 +19,10 @@ export default function EndpointComponent({
     api.endpoints.setEndpointVisibility,
   );
   const setEndpointRelevance = useMutation(api.endpoints.setEndpointRelevance);
+  const setEndpointImplemented = useMutation(
+    api.endpoints.setEndpointImplemented,
+  );
+  console.log(endpoint);
 
   return (
     <div className="flex flex-col gap-2">
@@ -49,6 +53,18 @@ export default function EndpointComponent({
             }
           />
         )}
+        <Check
+          size={"2rem"}
+          className="cursor-pointer"
+          color={endpoint.implemented == true ? "#53a653" : undefined}
+          strokeWidth={3}
+          onClick={async () => {
+            await setEndpointImplemented({
+              endpointId: endpoint._id,
+              implemented: !endpoint.implemented,
+            });
+          }}
+        />
 
         {!endpoint.relevant &&
           (!endpoint.hidden && !endpoint.relevant ? (
