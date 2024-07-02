@@ -71,7 +71,7 @@ export default function Dashboard({
       onValueChange={(value) => {
         router.push(pathname + "?" + createQueryString("tab", value));
       }}
-      className="flex h-full w-full flex-row gap-0 overflow-hidden p-0"
+      className="flex h-full w-full flex-row gap-0 p-0"
     >
       <TabsList className="m-0 justify-center rounded-none px-2">
         <TabsTrigger value="relevant-endpoints">Relevant Endpoints</TabsTrigger>
