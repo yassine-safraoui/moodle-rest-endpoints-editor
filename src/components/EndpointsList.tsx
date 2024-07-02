@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Doc } from "@/../convex/_generated/dataModel";
 import { useEffect, useRef } from "react";
-import { EyeOff, Star } from "lucide-react";
+import { EyeOff, Star, Check } from "lucide-react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { ScrollArea } from "./ui/scroll-area";
@@ -179,6 +179,9 @@ export default function EndpointsList({
                           .map((x, i) => (i ? [<wbr key={i} />, "_", x] : x))}
                       </a>
                     </Link>
+                    {endpoint.implemented ? (
+                      <Check size={"1rem"} color="#53a653" strokeWidth={3} />
+                    ) : null}
                     {endpoint.relevant ? (
                       <Star
                         size={"1rem"}

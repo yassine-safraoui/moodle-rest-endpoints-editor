@@ -26,7 +26,6 @@ export default function RelevantEndpointsList({
   const activeCategoryElement = useRef<HTMLAnchorElement>(null);
   const activeEndpointElement = useRef<HTMLAnchorElement>(null);
   const setEndpointRelevance = useMutation(api.endpoints.setEndpointRelevance);
-  const setCategoryRelevance = useMutation(api.categories.setCategoryRelevance);
 
   useEffect(() => {
     if (activeCategoryElement.current) {
