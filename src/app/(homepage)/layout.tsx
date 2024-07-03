@@ -71,7 +71,7 @@ export default function Dashboard({
       onValueChange={(value) => {
         router.push(pathname + "?" + createQueryString("tab", value));
       }}
-      className="flex h-full w-full flex-row gap-0 p-0"
+      className="flex h-full w-full flex-row gap-0 overflow-hidden p-0"
     >
       <TabsList className="m-0 justify-center rounded-none px-2">
         <TabsTrigger value="relevant-endpoints">Relevant Endpoints</TabsTrigger>
@@ -163,7 +163,7 @@ export default function Dashboard({
         </div>
       </div>
       <div
-        className="relative mt-14 h-full w-0"
+        className="relative pt-14 h-full w-0"
         style={{
           opacity: searchParams.get("collapse") === "true" ? 1 : 0,
           transition: "opacity",
@@ -171,7 +171,7 @@ export default function Dashboard({
         }}
       >
         <ChevronsRight
-          className="absolute left-0 top-4 cursor-pointer"
+          className="absolute left-1 top-19 cursor-pointer"
           size={"35"}
           onClick={() =>
             router.push(
