@@ -24,5 +24,21 @@ export default defineSchema({
 	users: defineTable({
 		name: v.string(),
 		tokenIdentifier: v.string(),
-	}).index("by_token", ["tokenIdentifier"]),
+		isAdmin: v.optional(v.boolean()),
+	}),
+	moodle_tables: defineTable({
+		name: v.string(),
+		description: v.string(),
+		columns_count: v.number(),
+		parents_count: v.number(),
+		children_count: v.number(),
+	}).index("by_name", ["name"]),
+	moodle_columns: defineTable({
+		name: v.string(),
+		description: v.string(),
+		type: v.string(),
+		nullable: v.boolean(),
+		table: v.id('moodle_tables'),
+	}).index("by_name", ["name"])
+
 });
