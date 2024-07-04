@@ -13,7 +13,10 @@ export default function Endpoint({ params }: { params: { name: string } }) {
   const { data: endpoint, isPending } = useQuery(api.endpoints.getEndpoint, {
     name: params.name,
   });
-  if (isPending) return <div>Loading...</div>;
+  if (isPending)
+    return (
+      <div className="flex h-full w-full place-content-center">Loading...</div>
+    );
   if (!endpoint) return <div>Endpoint not found</div>;
   try {
     const paramsSchema = EndpointParamsSchema.parse(

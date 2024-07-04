@@ -163,7 +163,7 @@ export default function Dashboard({
         </div>
       </div>
       <div
-        className="relative mt-14 h-full w-0"
+        className="relative pt-14 h-full w-0"
         style={{
           opacity: searchParams.get("collapse") === "true" ? 1 : 0,
           transition: "opacity",
@@ -171,7 +171,7 @@ export default function Dashboard({
         }}
       >
         <ChevronsRight
-          className="absolute left-0 top-4 cursor-pointer"
+          className="absolute left-1 top-19 cursor-pointer"
           size={"35"}
           onClick={() =>
             router.push(
