@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import EndpointsList from "@/components/EndpointsList";
 import { useQuery } from "convex-helpers/react";
 import { api } from "@/../convex/_generated/api";
+
 import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
@@ -12,6 +13,7 @@ import { Tabs, TabsContent, TabsTrigger, TabsList } from "@/components/ui/tabs";
 import HiddenEndpointsList from "@/components/HiddenEndpointsList";
 import HiddenCategoriesList from "@/components/HiddenCategoriesList";
 import RelevantEndpointsList from "@/components/RelevantEndpointsList";
+import MoodleTablesList from "@/components/MoodleTablesList";
 
 export default function Dashboard({
   children,
@@ -19,7 +21,7 @@ export default function Dashboard({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const [endpointsFilter, setEndpointsFilter] = useState<string>("");
+  const [filterInput, setFilterInput] = useState<string>("");
   const { data: endpointsList, isPending: endpointsLoading } = useQuery(
     api.endpoints.getEndpointsList,
     {},
@@ -28,7 +30,6 @@ export default function Dashboard({
     api.categories.getCategoriesList,
     {},
   );
-
   const searchParams = useSearchParams();
 
   const createQueryString = useCallback(
@@ -67,9 +68,11 @@ export default function Dashboard({
   return (
     <Tabs
       orientation="vertical"
-      defaultValue="relevant-endpoints"
+      defaultValue={searchParams.get("tab") || "relevant-endpoints"}
       onValueChange={(value) => {
         router.push(pathname + "?" + createQueryString("tab", value));
+        if (value === "schema-editor")
+          router.push("/schema-editor?tab=schema-editor");
       }}
       className="flex h-full w-full flex-row gap-0 overflow-hidden p-0"
     >
@@ -78,6 +81,7 @@ export default function Dashboard({
         <TabsTrigger value="visible-endpoints">Visible Endpoints</TabsTrigger>
         <TabsTrigger value="hidden-categories">Hidden Categories</TabsTrigger>
         <TabsTrigger value="hidden-endpoints">Hidden Endpoints</TabsTrigger>
+        <TabsTrigger value="schema-editor">Moodle Schema</TabsTrigger>
       </TabsList>
       <div
         className={`${
@@ -93,8 +97,8 @@ export default function Dashboard({
                 type="search"
                 placeholder="Search endpoints..."
                 className="w-full appearance-none bg-background pl-8 shadow-none"
-                value={endpointsFilter}
-                onChange={(e) => setEndpointsFilter(e.target.value)}
+                value={filterInput}
+                onChange={(e) => setFilterInput(e.target.value)}
               />
             </div>
             <ChevronsLeft
@@ -112,7 +116,7 @@ export default function Dashboard({
             className="m-0 h-full w-full overflow-hidden p-0"
           >
             <RelevantEndpointsList
-              filter={endpointsFilter}
+              filter={filterInput}
               endpointsList={endpointsList}
               categoriesList={categoriesList}
               categoriesLoading={categoriesLoading}
@@ -126,7 +130,7 @@ export default function Dashboard({
             className="m-0 h-full w-full overflow-hidden p-0"
           >
             <EndpointsList
-              filter={endpointsFilter}
+              filter={filterInput}
               endpointsList={endpointsList}
               categoriesList={categoriesList}
               categoriesLoading={categoriesLoading}
@@ -140,7 +144,7 @@ export default function Dashboard({
             className="m-0 h-full w-full overflow-hidden p-0"
           >
             <HiddenEndpointsList
-              filter={endpointsFilter}
+              filter={filterInput}
               endpointsList={endpointsList}
               categoriesList={categoriesList}
               categoriesLoading={categoriesLoading}
@@ -154,16 +158,24 @@ export default function Dashboard({
             className="m-0 h-full w-full overflow-hidden p-0"
           >
             <HiddenCategoriesList
-              filter={endpointsFilter}
+              filter={filterInput}
               categoriesList={categoriesList}
               categoriesLoading={categoriesLoading}
               activeCategory={activeCategory}
             />
           </TabsContent>
+          <TabsContent
+            value="schema-editor"
+            className="m-0 h-full w-full overflow-hidden p-0"
+          >
+            <MoodleTablesList
+              filter={filterInput}
+            />
+          </TabsContent>
         </div>
       </div>
       <div
-        className="relative pt-14 h-full w-0"
+        className="relative h-full w-0 pt-14"
         style={{
           opacity: searchParams.get("collapse") === "true" ? 1 : 0,
           transition: "opacity",
@@ -171,7 +183,7 @@ export default function Dashboard({
         }}
       >
         <ChevronsRight
-          className="absolute left-1 top-19 cursor-pointer"
+          className="top-19 absolute left-1 z-10 cursor-pointer"
           size={"35"}
           onClick={() =>
             router.push(
