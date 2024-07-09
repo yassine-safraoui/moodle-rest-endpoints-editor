@@ -22,8 +22,6 @@ export default function EndpointComponent({
   const setEndpointImplemented = useMutation(
     api.endpoints.setEndpointImplemented,
   );
-  console.log(endpoint);
-
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row items-center gap-2">
@@ -114,7 +112,6 @@ export default function EndpointComponent({
       <code className="rounded-md bg-syntax-code-background p-3 text-syntax-code">
         <EndpointResponse params={endpoint.responseSchema} />
       </code>
-      {/* <code>{endpoint.responseSchema}</code> */}
     </div>
   );
 }
