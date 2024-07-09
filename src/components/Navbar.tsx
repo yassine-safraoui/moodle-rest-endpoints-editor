@@ -16,8 +16,6 @@ import { useQuery } from "convex-helpers/react";
 import { api } from "../../convex/_generated/api";
 import {
   AlertDialog,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import SettingsOverlay from "./SettingsOverlay";

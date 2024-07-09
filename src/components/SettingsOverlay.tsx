@@ -55,14 +55,14 @@ export default function Settings() {
       if (!tables) return;
       csv({ output: "json" })
         .fromString(tables)
-        .then(async (tablesData) => {
+        .then(async (tablesData: any) => {
           console.log(tablesData);
           await importTables({ tables: JSON.stringify(tablesData) });
 
           if (!columns) return;
           csv({ output: "json" })
             .fromString(columns)
-            .then((columnsData) => {
+            .then((columnsData: any) => {
               console.log(columnsData);
               importColumns({ columns: JSON.stringify(columnsData) });
             });
@@ -77,7 +77,7 @@ export default function Settings() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full p-10">
           <AlertDialogHeader>
             <AlertDialogTitle>Settings</AlertDialogTitle>
-            <AlertDialogDescription hidden>
+            <AlertDialogDescription className="sr-only">
               Upload Moodle tables and columns
             </AlertDialogDescription>
           </AlertDialogHeader>
